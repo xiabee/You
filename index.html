@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>给曾老师的生日小世界</title>
+
+  <!-- 中文文艺字体 -->
+  <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- 🔒 锁屏 -->
+<div id="lock-screen">
+  <h2>请输入我们的纪念日</h2>
+  <p class="hint">一个只有我们知道的日期</p>
+  <input type="password" id="password" placeholder="YYYYMMDD" />
+  <button id="unlock">进入</button>
+  <p id="error"></p>
+</div>
+
+<!-- 🌸 主页面 -->
+<div id="app" class="hidden">
+
+  <!-- 🎵 音乐按钮 -->
+  <div id="music-btn" title="播放音乐">🎵</div>
+
+  <!-- 封面 -->
+  <section class="cover">
+    <h1>Hi，曾老师</h1>
+    <p>这是我为你准备的一点小浪漫</p>
+    <button id="enter">慢慢看</button>
+  </section>
+
+  <!-- 信件 -->
+  <section class="letter hidden">
+    <p id="typed"></p>
+  </section>
+
+</div>
+
+<audio id="bgm" src="assets/music.mp3" loop></audio>
+
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script src="main.js"></script>
+<script src="petals.js"></script>
+</body>
+</html>
