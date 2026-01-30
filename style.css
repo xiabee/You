@@ -1,7 +1,14 @@
-/* style.css */
+/* 全局变量与移动端点击优化 */
 :root {
   --text-main: #4a4a4a;
   --accent: #d4a5a5;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; /* 去除移动端点击高亮 */
+  touch-action: manipulation; /* 提升移动端点击响应 */
 }
 
 body, html {
@@ -9,7 +16,7 @@ body, html {
   padding: 0;
   height: 100%;
   width: 100%;
-  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", serif;
   color: var(--text-main);
   /* 🌅 日出日落动态背景 */
   background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 30%, #ff9a9e 60%, #2575fc 100%);
@@ -18,26 +25,29 @@ body, html {
   overflow-x: hidden;
 }
 
+/* 背景颜色流动动画 */
 @keyframes skyFlow {
   0% { background-position: 0% 0%; }
   50% { background-position: 0% 100%; }
   100% { background-position: 0% 0%; }
 }
 
+/* ❄️ 特效 Canvas 容器 */
 #effect-canvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  pointer-events: none; /* 允许点击穿透到下层加速或触发礼花 */
   z-index: 1;
 }
 
+/* 🔒 锁屏界面适配 */
 #lock-screen {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--glass-bg);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   display: flex;
@@ -49,34 +59,51 @@ body, html {
 
 .lock-box {
   text-align: center;
-  padding: 40px;
-  background: white;
-  border-radius: 28px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+  padding: 30px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  width: 85%;
+  max-width: 320px;
+}
+
+.lock-box p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  letter-spacing: 1px;
 }
 
 .lock-box input {
-  padding: 14px;
+  padding: 12px;
   border: 1px solid #eee;
-  border-radius: 14px;
-  width: 200px;
+  border-radius: 12px;
+  width: 100%;
   text-align: center;
   font-size: 18px;
   outline: none;
+  background: #fafafa;
+  transition: border 0.3s;
+}
+
+.lock-box input:focus {
+  border-color: var(--accent);
 }
 
 .lock-box button {
-  margin-top: 25px;
+  margin-top: 20px;
   width: 100%;
   padding: 14px;
   background: var(--accent);
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 14px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 2px;
 }
 
+/* 🎯 主内容容器适配 */
 #main-wrapper {
   position: relative;
   z-index: 2;
@@ -84,53 +111,94 @@ body, html {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 15vh;
+  padding-top: 15vh; /* 顶部留白，适合手机阅读 */
   min-height: 100vh;
+  min-height: 100dvh; /* 适配手机动态视口高度 */
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
   box-sizing: border-box;
 }
 
+/* 打字机文字区域 */
 #typing-container {
   max-width: 600px;
-  width: 90%;
-  font-size: 1.15rem;
+  width: 100%;
+  min-height: 120px;
+  font-size: 1.15rem; /* PC端字号 */
   line-height: 2.2;
+  text-align: left;
 }
 
 .typing-line {
   margin-bottom: 18px;
   min-height: 1.6em;
   white-space: pre-wrap;
+  word-break: break-all; /* 防止长单词撑破布局 */
 }
 
+/* 打字光标样式 */
 .typing-line.active::after {
   content: " |";
   animation: blink 1s infinite;
   color: var(--accent);
+  font-weight: bold;
 }
 
 @keyframes blink { 50% { opacity: 0; } }
 
+/* 📸 最终照片适配（拍立得风格） */
 #final-photo {
-  margin-top: 50px;
+  margin-top: 40px;
   margin-bottom: 80px;
-  width: 90%;
-  max-width: 380px;
+  width: 85vw; /* 手机端宽度占屏幕 85% */
+  max-width: 380px; /* PC端最大宽度 */
   display: none; 
   opacity: 0;
-  transition: all 2s ease;
+  transition: all 2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateY(30px) rotate(-2deg);
 }
 
 #final-photo.show {
   display: block;
   opacity: 1;
+  transform: translateY(0) rotate(-2deg);
 }
 
 #final-photo img {
   width: 100%;
   height: auto;
-  border: 12px solid #fff;
-  border-bottom: 45px solid #fff;
-  border-radius: 4px;
-  box-shadow: 0 20px 45px rgba(0,0,0,0.1);
-  transform: rotate(-2deg);
+  background-color: #fff;
+  padding: 12px 12px 45px 12px; /* 拍立得相纸留白 */
+  border: 1px solid #eee;
+  border-radius: 2px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  display: block;
+}
+
+/* 📱 手机端专用微调 */
+@media (max-width: 600px) {
+  #main-wrapper {
+    padding-top: 10vh; /* 手机端文字往上提一点 */
+  }
+
+  #typing-container {
+    font-size: 1.05rem; /* 稍微缩小手机字号 */
+    line-height: 1.9;
+  }
+
+  .typing-line {
+    margin-bottom: 14px;
+  }
+  
+  #final-photo {
+    margin-top: 30px;
+  }
+}
+
+/* 🔋 针对横屏手机或折叠屏的微调 */
+@media (max-height: 500px) {
+  #main-wrapper {
+    padding-top: 5vh;
+  }
 }
