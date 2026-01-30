@@ -1,8 +1,5 @@
 /* style.css */
 :root {
-  --bg-top: #ffffff;
-  --bg-mid: #fdf5f6;
-  --bg-bottom: #f3eef1;
   --text-main: #4a4a4a;
   --accent: #d4a5a5;
 }
@@ -14,11 +11,29 @@ body, html {
   width: 100%;
   font-family: "Noto Serif SC", "Songti SC", serif;
   color: var(--text-main);
-  background: radial-gradient(circle at center, var(--bg-top) 0%, var(--bg-mid) 60%, var(--bg-bottom) 100%);
+  /* 🌅 日出日落动态背景 */
+  background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 30%, #ff9a9e 60%, #2575fc 100%);
+  background-size: 100% 400%;
+  animation: skyFlow 24s ease infinite; 
   overflow-x: hidden;
 }
 
-/* 🔒 锁屏界面 */
+@keyframes skyFlow {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+#effect-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
 #lock-screen {
   position: fixed;
   inset: 0;
@@ -29,7 +44,7 @@ body, html {
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.8s ease;
 }
 
 .lock-box {
@@ -48,12 +63,10 @@ body, html {
   text-align: center;
   font-size: 18px;
   outline: none;
-  background: #fdfdfd;
 }
 
 .lock-box button {
   margin-top: 25px;
-  display: block;
   width: 100%;
   padding: 14px;
   background: var(--accent);
@@ -64,22 +77,21 @@ body, html {
   font-weight: bold;
 }
 
-/* 🎯 修复空白的关键：主容器布局 */
 #main-wrapper {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 确保从顶部开始排列 */
-  padding-top: 20vh;           /* 初始预留高度，防止内容跳动 */
+  justify-content: flex-start;
+  padding-top: 15vh;
   min-height: 100vh;
-  width: 100%;
   box-sizing: border-box;
 }
 
 #typing-container {
   max-width: 600px;
   width: 90%;
-  min-height: 100px;
   font-size: 1.15rem;
   line-height: 2.2;
 }
@@ -90,7 +102,6 @@ body, html {
   white-space: pre-wrap;
 }
 
-/* 🖋️ 打字光标 */
 .typing-line.active::after {
   content: " |";
   animation: blink 1s infinite;
@@ -99,7 +110,6 @@ body, html {
 
 @keyframes blink { 50% { opacity: 0; } }
 
-/* 📸 照片适配 */
 #final-photo {
   margin-top: 50px;
   margin-bottom: 80px;
@@ -108,18 +118,19 @@ body, html {
   display: none; 
   opacity: 0;
   transition: all 2s ease;
-  transform: translateY(20px);
 }
 
 #final-photo.show {
   display: block;
   opacity: 1;
-  transform: translateY(0);
 }
 
 #final-photo img {
   width: 100%;
   height: auto;
-  border-radius: 24px;
+  border: 12px solid #fff;
+  border-bottom: 45px solid #fff;
+  border-radius: 4px;
   box-shadow: 0 20px 45px rgba(0,0,0,0.1);
+  transform: rotate(-2deg);
 }
