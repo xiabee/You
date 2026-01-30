@@ -2,49 +2,32 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>给曾老师的生日小世界</title>
-
-  <!-- 中文文艺字体 -->
-  <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css" rel="stylesheet">
-
+  <title>给曾格妮</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <!-- 🔒 锁屏 -->
 <div id="lock-screen">
-  <h2>请输入我们的纪念日</h2>
-  <p class="hint">一个只有我们知道的日期</p>
-  <input type="password" id="password" placeholder="YYYYMMDD" />
-  <button id="unlock">进入</button>
-  <p id="error"></p>
+  <div class="lock-box">
+    <p>请输入纪念日密码</p>
+    <input type="password" id="password" placeholder="YYYYMMDD" />
+    <button onclick="unlock()">进入</button>
+  </div>
 </div>
 
-<!-- 🌸 主页面 -->
-<div id="app" class="hidden">
+<!-- 🎵 音乐 -->
+<audio id="bgm" src="music.mp3" loop></audio>
 
-  <!-- 🎵 音乐按钮 -->
-  <div id="music-btn" title="播放音乐">🎵</div>
+<!-- 打字区域 -->
+<div id="typing-container"></div>
 
-  <!-- 封面 -->
-  <section class="cover">
-    <h1>Hi，曾老师</h1>
-    <p>这是我为你准备的一点小浪漫</p>
-    <button id="enter">慢慢看</button>
-  </section>
-
-  <!-- 信件 -->
-  <section class="letter hidden">
-    <p id="typed"></p>
-  </section>
-
+<!-- 📸 最终照片 -->
+<div id="final-photo" class="hidden">
+  <img src="assets/photo.jpg" alt="我们" />
 </div>
 
-<audio id="bgm" src="assets/music.mp3" loop></audio>
-
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-<script src="main.js"></script>
-<script src="petals.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

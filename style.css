@@ -1,150 +1,87 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
   margin: 0;
-  font-family: "LXGW WenKai Lite", serif;
-  background: #fdf8f5;
-  color: #3a2f2f;
-  line-height: 1.9;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #faf6f7 40%,
+    #f3eef1 100%
+  );
+  font-family: "Noto Serif SC", "Songti SC", serif;
 }
 
-/* 锁屏 */
+
+
+#typing-container {
+  max-width: 720px;
+  margin: 60px auto;
+  padding: 24px;
+  font-size: 18px;
+  line-height: 2;
+}
+
+.typing-line {
+  margin-bottom: 12px;
+  white-space: pre-wrap;
+}
+
+/* 🔒 锁屏 */
 #lock-screen {
-  height: 100vh;
+  position: fixed;
+  inset: 0;
+  background: #111;
+  color: #fff;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: #fdf8f5;
+  z-index: 1000;
 }
 
-#lock-screen h2 {
-  font-size: 26px;
-  margin-bottom: 8px;
-}
-
-.hint {
-  font-size: 14px;
-  opacity: 0.7;
-}
-
-#password {
-  margin-top: 20px;
-  padding: 12px;
-  width: 200px;
+.lock-box {
   text-align: center;
-  font-size: 16px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
 }
 
-#unlock {
-  margin-top: 16px;
-  padding: 10px 28px;
-  border-radius: 20px;
-  border: none;
-  background: #e6b7b7;
-  color: white;
-  font-size: 15px;
-  cursor: pointer;
+.lock-box input {
+  padding: 8px;
+  margin-top: 12px;
+  width: 180px;
 }
 
-#error {
-  margin-top: 10px;
-  color: #c46a6a;
-  font-size: 14px;
+.lock-box button {
+  margin-top: 12px;
+  padding: 6px 18px;
 }
 
-/* 主体 */
+/* 📸 照片 */
+#final-photo {
+  display: flex;
+  justify-content: center;
+  margin: 80px 0 120px;
+}
+
+#final-photo img {
+  width: 320px;
+  max-width: 85vw;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  animation: fadeIn 2.5s ease forwards;
+}
+
+
 .hidden {
   display: none;
 }
 
-.cover {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.cover h1 {
-  font-size: 42px;
-  margin-bottom: 10px;
-}
-
-.cover p {
-  opacity: 0.8;
-}
-
-.cover button {
-  margin-top: 30px;
-  padding: 12px 30px;
-  border-radius: 24px;
-  border: none;
-  background: #e6b7b7;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* 信件 */
-.letter {
-  padding: 60px 20px;
-  max-width: 720px;
-  margin: 0 auto;
-  font-size: 18px;
-}
-
-/* 音乐按钮 */
-#music-btn {
-  position: fixed;
-  top: 18px;
-  right: 18px;
-  font-size: 22px;
-  cursor: pointer;
-  z-index: 10;
-}
-
-/* 花瓣 */
-.petal {
-  position: fixed;
-  top: -50px;
-  width: 22px;
-  height: 22px;
-  background: url("assets/petal.png") no-repeat center / contain;
-  animation: fall 14s linear infinite;
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-@keyframes fall {
-  from {
-    transform: translateY(0) rotate(0);
-  }
+@keyframes fadeIn {
   to {
-    transform: translateY(110vh) rotate(360deg);
+    opacity: 1;
   }
 }
 
-/* 📱 手机端 */
-@media (max-width: 768px) {
-  body {
-    font-size: 18px;
-  }
-
-  .cover h1 {
-    font-size: 32px;
-  }
-
-  .letter {
-    padding: 40px 16px;
-  }
-
-  .petal {
-    display: none;
+/* 手机 */
+@media (max-width: 600px) {
+  #typing-container {
+    font-size: 16px;
+    margin-top: 40px;
   }
 }
