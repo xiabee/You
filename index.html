@@ -4,31 +4,30 @@
   <meta charset="UTF-8" />
   <title>致格妮的一封信</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+<canvas id="snow-canvas"></canvas>
+
 <div id="lock-screen">
-  <div class="glass-card lock-box">
-    <div class="heart-icon">❤️</div>
-    <h2>专属纪念空间</h2>
-    <p>请输入我们在一起的纪念日</p>
+  <div class="lock-box">
+    <div class="heart-icon">✉️</div>
+    <p>请输入我们的纪念日</p>
     <input type="password" id="password" placeholder="YYYYMMDD" maxlength="8" autofocus />
-    <button onclick="unlock()">开启心动</button>
+    <button onclick="unlock()">开启心跳</button>
   </div>
 </div>
 
 <audio id="bgm" src="music.mp3" loop></audio>
-<canvas id="effect-canvas"></canvas>
 
 <main id="main-wrapper">
-  <div class="glass-card content-card">
-    <div id="typing-container"></div>
-    <div id="final-photo">
-      <div class="photo-polaroid">
-        <img src="assets/photo.jpg" alt="我们的瞬间" />
-        <div class="photo-caption">2025 · 我们的第一年</div>
+  <div id="letter-container">
+    <div class="letter-paper">
+      <div id="typing-container"></div>
+      <div id="final-photo">
+        <img src="assets/photo.jpg" alt="我们" />
+        <p class="photo-date">2025 · 岁末</p>
       </div>
     </div>
   </div>

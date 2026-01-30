@@ -1,12 +1,9 @@
+/* 全局基础设置 */
 :root {
-  --accent: #e5b3b3;
-  --bg-gradient: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
-  --glass: rgba(255, 255, 255, 0.6);
-}
-
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+  --paper-color: #fdfdfb;
+  --text-color: #444;
+  --accent: #d4a5a5;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 body, html {
@@ -14,115 +11,146 @@ body, html {
   padding: 0;
   height: 100%;
   width: 100%;
-  font-family: 'Noto Serif SC', serif;
-  color: #555;
-  background: var(--bg-gradient);
-  background-size: 400% 400%;
-  animation: bgFlow 15s ease infinite;
+  /* 柔和的晨曦渐变背景 */
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+  color: var(--text-color);
   overflow-x: hidden;
 }
 
-@keyframes bgFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+#snow-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* 磨砂玻璃效果 */
-.glass-card {
-  background: var(--glass);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 30px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.05);
-}
-
+/* 🔒 锁屏 */
 #lock-screen {
   position: fixed;
   inset: 0;
+  background: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  transition: all 1s ease;
+  transition: opacity 1s ease-out;
 }
 
-.lock-box {
-  padding: 40px;
-  text-align: center;
-  width: 90%;
-  max-width: 350px;
+.lock-box { text-align: center; }
+.heart-icon { font-size: 3rem; margin-bottom: 1rem; animation: heartbeat 1.5s infinite; }
+@keyframes heartbeat { 
+  0% { transform: scale(1); } 
+  50% { transform: scale(1.1); } 
+  100% { transform: scale(1); } 
 }
-
-.heart-icon { font-size: 40px; margin-bottom: 10px; animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
 
 .lock-box input {
-  width: 100%;
   padding: 12px;
-  margin: 20px 0;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255,255,255,0.8);
+  border: 1px solid #eee;
+  border-radius: 8px;
+  width: 220px;
   text-align: center;
-  font-size: 18px;
   outline: none;
 }
 
 .lock-box button {
-  width: 100%;
-  padding: 12px;
+  display: block;
+  margin: 20px auto;
+  padding: 10px 40px;
   background: var(--accent);
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
 }
 
+/* 💌 信封容器 */
 #main-wrapper {
-  padding: 10vh 20px;
+  position: relative;
+  z-index: 2;
   display: flex;
   justify-content: center;
-  min-height: 100dvh;
+  padding: 60px 20px;
+  min-height: 100vh;
 }
 
-.content-card {
+#letter-container {
   width: 100%;
   max-width: 650px;
-  padding: 40px;
-  height: fit-content;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+#letter-container.open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 📄 纸张样式 */
+.letter-paper {
+  background: var(--paper-color);
+  background-image: radial-gradient(#e5e5e5 1px, transparent 0); /* 极细微的纹理 */
+  background-size: 40px 40px;
+  padding: 50px 40px;
+  border-radius: 4px;
+  box-shadow: var(--shadow), inset 0 0 100px rgba(255,255,255,0.5);
+  border: 1px solid rgba(0,0,0,0.02);
+  min-height: 60vh;
+  position: relative;
+}
+
+/* ✍️ 字体排版 */
 #typing-container {
   font-size: 1.1rem;
   line-height: 2.2;
-  min-height: 150px;
+  letter-spacing: 0.05em;
+  text-align: justify;
 }
 
-/* 拍立得照片效果优化 */
-.photo-polaroid {
-  background: white;
-  padding: 12px 12px 35px 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  transform: rotate(3deg);
-  margin-top: 40px;
+.typing-line {
+  margin-bottom: 20px;
+  min-height: 1.6em;
+}
+
+.typing-line.active::after {
+  content: " _";
+  color: var(--accent);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+/* 📸 照片适配 */
+#final-photo {
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px dashed #eee;
+  display: none;
+  text-align: center;
   opacity: 0;
-  transition: all 2s ease;
+  transition: opacity 2s ease;
 }
 
-.photo-polaroid img { width: 100%; border-radius: 2px; }
-.photo-caption { text-align: center; margin-top: 15px; font-size: 0.9rem; color: #888; }
+#final-photo.show { display: block; opacity: 1; }
 
-#final-photo.show .photo-polaroid {
-  opacity: 1;
-  transform: rotate(0deg) translateY(-20px);
+#final-photo img {
+  max-width: 100%;
+  border: 8px solid #fff;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
-#effect-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 1; }
+.photo-date {
+  font-size: 0.9rem;
+  color: #999;
+  margin-top: 10px;
+  font-style: italic;
+}
 
+/* 手机端适配 */
 @media (max-width: 600px) {
-  .content-card { padding: 25px; }
+  .letter-paper { padding: 30px 20px; }
   #typing-container { font-size: 1rem; }
 }
