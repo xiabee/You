@@ -3,33 +3,40 @@ const bgm = document.getElementById("bgm");
 const lockScreen = document.getElementById("lock-screen");
 const finalPhoto = document.getElementById("final-photo");
 
-// 🔒 解锁（纪念日：2025-12-31）
+[cite_start]// 🔒 解锁逻辑 (密码：20251231) [cite: 1]
 function unlock() {
   const pwd = document.getElementById("password").value;
   if (pwd === "20251231") {
-    lockScreen.style.display = "none";
-    start();
+    lockScreen.style.opacity = "0";
+    setTimeout(() => {
+      lockScreen.style.display = "none";
+      start();
+    }, 1000);
   } else {
-    alert("密码不对哦");
+    alert("不对哦，请重新输入");
   }
 }
 
+// 监听回车键
+document.getElementById("password").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") unlock();
+});
 
-// 🕰 在一起第 X 天
+[cite_start]// 🕰 计算在一起的天数 [cite: 1]
 function daysTogether() {
-  const start = new Date("2025-12-31");
+  const startDate = new Date("2025-12-31T00:00:00");
   const today = new Date();
-  const diff = today - start;
-  return Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+  const diffTime = today.setHours(0,0,0,0) - startDate.setHours(0,0,0,0);
+  return Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
 }
 
-// 🎂 是否生日（2026-02-01）
+[cite_start]// 🎂 生日判断 (2月1日) [cite: 1]
 function isBirthday() {
   const d = new Date();
-  return d.getFullYear() === 2026 && d.getMonth() === 1 && d.getDate() === 1;
+  return d.getMonth() === 1 && d.getDate() === 1;
 }
 
-// 💗 文案
+// 💗 文案数组
 const lines = [
   "曾老师，",
   "",
@@ -43,79 +50,82 @@ const lines = [
   "",
   "愿你此刻，",
   "刚好看到这里。",
+  "",
+  "—— 肖 sir"
 ];
 
-// 🎂 生日隐藏句（只在当天 push）
-if (isBirthday()) {
-  lines.push("");
-  lines.push("这一行，只会在你生日这天出现。");
-  lines.push("因为你本身，就值得被单独庆祝。");
-}
-
-// 署名（始终最后）
-lines.push("");
-lines.push("—— 肖 sir");
-
-
-// ⏩ 点击加速
 let speed = 80;
+[cite_start]// 点击屏幕任意位置加速 [cite: 1]
 document.body.addEventListener("click", () => {
-  speed = Math.max(20, speed - 15);
+  speed = Math.max(25, speed - 15);
 });
 
-
-// 🎵 音乐淡入
+[cite_start]// 🎵 音乐淡入逻辑 [cite: 1]
 function startMusic() {
   bgm.volume = 0;
   bgm.play().catch(() => {});
   let v = 0;
   const fade = setInterval(() => {
-    v += 0.02;
-    bgm.volume = Math.min(v, 1);
-    if (v >= 1) clearInterval(fade);
+    v += 0.05;
+    if (v >= 1) {
+      bgm.volume = 1;
+      clearInterval(fade);
+    } else {
+      bgm.volume = v;
+    }
   }, 200);
 }
 
-// ✍ 打字逻辑
 let lineIndex = 0;
 let charIndex = 0;
-let currentLine;
+let currentLineElem;
 
 function typeNext() {
-if (lineIndex >= lines.length) {
-  finalPhoto.classList.remove("hidden");
+  // 检查是否全部打完
+  if (lineIndex >= lines.length) {
+    if (currentLineElem) currentLineElem.classList.remove("active");
+    
+    // 📸 展示照片
+    finalPhoto.classList.add("show");
+    setTimeout(() => {
+      finalPhoto.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 800);
+    return;
+  }
 
-  // ✨ 轻微上滑，让照片进入视野中央
-  setTimeout(() => {
-    finalPhoto.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-  }, 800);
-
-  return;
-}
-
+  // 开启新行
   if (charIndex === 0) {
-    currentLine = document.createElement("p");
-    currentLine.className = "typing-line";
-    container.appendChild(currentLine);
-
+    if (currentLineElem) currentLineElem.classList.remove("active");
+    
+    currentLineElem = document.createElement("p");
+    currentLineElem.className = "typing-line active";
+    container.appendChild(currentLineElem);
+    
     if (lineIndex === 0) startMusic();
   }
 
   const text = lines[lineIndex];
-  if (charIndex < text.length) {
-    currentLine.textContent += text.charAt(charIndex++);
-    setTimeout(typeNext, speed);
-  } else {
+
+  // 处理空行：停顿一下直接下一行
+  if (text.length === 0) {
     lineIndex++;
     charIndex = 0;
-    setTimeout(typeNext, 600);
+    setTimeout(typeNext, 500);
+    return;
+  }
+
+  // 逐字输入
+  if (charIndex < text.length) {
+    currentLineElem.textContent += text.charAt(charIndex++);
+    setTimeout(typeNext, speed);
+  } else {
+    // 这一行打完了，换行前停顿
+    lineIndex++;
+    charIndex = 0;
+    setTimeout(typeNext, 900);
   }
 }
 
-// ▶ 启动
 function start() {
   typeNext();
 }

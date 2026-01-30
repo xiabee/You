@@ -8,25 +8,23 @@
 </head>
 <body>
 
-<!-- 🔒 锁屏 -->
 <div id="lock-screen">
   <div class="lock-box">
-    <p>请输入纪念日密码</p>
-    <input type="password" id="password" placeholder="YYYYMMDD" />
-    <button onclick="unlock()">进入</button>
+    <p>请输入我们的纪念日密码</p>
+    <input type="password" id="password" placeholder="YYYYMMDD" maxlength="8" autofocus />
+    <button onclick="unlock()">确认进入</button>
   </div>
 </div>
 
-<!-- 🎵 音乐 -->
 <audio id="bgm" src="music.mp3" loop></audio>
 
-<!-- 打字区域 -->
-<div id="typing-container"></div>
+<main id="main-wrapper">
+  <div id="typing-container"></div>
 
-<!-- 📸 最终照片 -->
-<div id="final-photo" class="hidden">
-  <img src="assets/photo.jpg" alt="我们" />
-</div>
+  <div id="final-photo">
+    <img src="assets/photo.jpg" alt="我们" />
+  </div>
+</main>
 
 <script src="script.js"></script>
 </body>

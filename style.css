@@ -1,87 +1,143 @@
-body {
+/* 全局变量定义 */
+:root {
+  --bg-top: #ffffff;
+  --bg-mid: #fdf5f6;
+  --bg-bottom: #f3eef1;
+  --text-main: #4a4a4a;
+  --accent: #d4a5a5;
+}
+
+body, html {
   margin: 0;
-  background: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    #faf6f7 40%,
-    #f3eef1 100%
-  );
+  padding: 0;
+  height: 100%;
+  width: 100%;
   font-family: "Noto Serif SC", "Songti SC", serif;
+  color: var(--text-main);
+  /* 优化后的背景：径向渐变更有沉浸感 */
+  background: radial-gradient(circle at center, var(--bg-top) 0%, var(--bg-mid) 60%, var(--bg-bottom) 100%);
+  overflow-x: hidden;
 }
 
-
-
-#typing-container {
-  max-width: 720px;
-  margin: 60px auto;
-  padding: 24px;
-  font-size: 18px;
-  line-height: 2;
-}
-
-.typing-line {
-  margin-bottom: 12px;
-  white-space: pre-wrap;
-}
-
-/* 🔒 锁屏 */
+/* 🔒 锁屏界面优化 */
 #lock-screen {
   position: fixed;
   inset: 0;
-  background: #111;
-  color: #fff;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .lock-box {
   text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 28px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
 }
 
 .lock-box input {
-  padding: 8px;
-  margin-top: 12px;
-  width: 180px;
+  padding: 14px;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  width: 220px;
+  text-align: center;
+  font-size: 18px;
+  outline: none;
+  background: #fdfdfd;
+  transition: all 0.3s;
+}
+
+.lock-box input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.2);
 }
 
 .lock-box button {
-  margin-top: 12px;
-  padding: 6px 18px;
+  margin-top: 25px;
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
-/* 📸 照片 */
-#final-photo {
+/* 🎯 居中容器布局 */
+#main-wrapper {
   display: flex;
-  justify-content: center;
-  margin: 80px 0 120px;
+  flex-direction: column;
+  align-items: center;  /* 水平居中 */
+  justify-content: center; /* 垂直居中 */
+  min-height: 100vh;
+  width: 100%;
+  padding: 50px 24px;
+  box-sizing: border-box;
+}
+
+#typing-container {
+  max-width: 600px;
+  width: 100%;
+  font-size: 1.15rem;
+  line-height: 2.2;
+  text-align: left; /* 保持文字左对齐的优美排版 */
+}
+
+.typing-line {
+  margin-bottom: 18px;
+  min-height: 1.6em;
+  white-space: pre-wrap; /* 保持 script.js 里的空行 [cite: 1] */
+}
+
+/* 打字机光标 */
+.typing-line.active::after {
+  content: " 🖋️"; /* 或者用 "|" */
+  animation: blink 1s infinite;
+  opacity: 0.7;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+/* 📸 照片自适应 Bug 修复 */
+#final-photo {
+  margin-top: 60px;
+  width: 100%;
+  max-width: 380px; /* 限制 PC 端展示尺寸 */
+  opacity: 0;
+  display: none;
+  transform: scale(0.95) translateY(30px);
+  transition: all 2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+#final-photo.show {
+  display: block;
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
 
 #final-photo img {
-  width: 320px;
-  max-width: 85vw;
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-  opacity: 0;
-  animation: fadeIn 2.5s ease forwards;
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+  display: block;
 }
 
-
-.hidden {
-  display: none;
-}
-
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-  }
-}
-
-/* 手机 */
+/* 移动端细调 */
 @media (max-width: 600px) {
   #typing-container {
-    font-size: 16px;
-    margin-top: 40px;
+    font-size: 1.05rem;
+    padding: 0 10px;
   }
+  .lock-box { width: 80%; }
 }
