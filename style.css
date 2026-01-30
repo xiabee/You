@@ -1,4 +1,4 @@
-/* 全局变量定义 */
+/* style.css */
 :root {
   --bg-top: #ffffff;
   --bg-mid: #fdf5f6;
@@ -14,29 +14,28 @@ body, html {
   width: 100%;
   font-family: "Noto Serif SC", "Songti SC", serif;
   color: var(--text-main);
-  /* 优化后的背景：径向渐变更有沉浸感 */
   background: radial-gradient(circle at center, var(--bg-top) 0%, var(--bg-mid) 60%, var(--bg-bottom) 100%);
   overflow-x: hidden;
 }
 
-/* 🔒 锁屏界面优化 */
+/* 🔒 锁屏界面 */
 #lock-screen {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.6s ease;
 }
 
 .lock-box {
   text-align: center;
   padding: 40px;
-  background: rgba(255, 255, 255, 0.9);
+  background: white;
   border-radius: 28px;
   box-shadow: 0 15px 35px rgba(0,0,0,0.05);
 }
@@ -45,17 +44,11 @@ body, html {
   padding: 14px;
   border: 1px solid #eee;
   border-radius: 14px;
-  width: 220px;
+  width: 200px;
   text-align: center;
   font-size: 18px;
   outline: none;
   background: #fdfdfd;
-  transition: all 0.3s;
-}
-
-.lock-box input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(212, 165, 165, 0.2);
 }
 
 .lock-box button {
@@ -68,76 +61,65 @@ body, html {
   border: none;
   border-radius: 14px;
   cursor: pointer;
-  font-size: 16px;
   font-weight: bold;
-  letter-spacing: 2px;
 }
 
-/* 🎯 居中容器布局 */
+/* 🎯 修复空白的关键：主容器布局 */
 #main-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: center;  /* 水平居中 */
-  justify-content: center; /* 垂直居中 */
+  align-items: center;
+  justify-content: flex-start; /* 确保从顶部开始排列 */
+  padding-top: 20vh;           /* 初始预留高度，防止内容跳动 */
   min-height: 100vh;
   width: 100%;
-  padding: 50px 24px;
   box-sizing: border-box;
 }
 
 #typing-container {
   max-width: 600px;
-  width: 100%;
+  width: 90%;
+  min-height: 100px;
   font-size: 1.15rem;
   line-height: 2.2;
-  text-align: left; /* 保持文字左对齐的优美排版 */
 }
 
 .typing-line {
   margin-bottom: 18px;
   min-height: 1.6em;
-  white-space: pre-wrap; /* 保持 script.js 里的空行 [cite: 1] */
+  white-space: pre-wrap;
 }
 
-/* 打字机光标 */
+/* 🖋️ 打字光标 */
 .typing-line.active::after {
-  content: " 🖋️"; /* 或者用 "|" */
+  content: " |";
   animation: blink 1s infinite;
-  opacity: 0.7;
+  color: var(--accent);
 }
 
 @keyframes blink { 50% { opacity: 0; } }
 
-/* 📸 照片自适应 Bug 修复 */
+/* 📸 照片适配 */
 #final-photo {
-  margin-top: 60px;
-  width: 100%;
-  max-width: 380px; /* 限制 PC 端展示尺寸 */
+  margin-top: 50px;
+  margin-bottom: 80px;
+  width: 90%;
+  max-width: 380px;
+  display: none; 
   opacity: 0;
-  display: none;
-  transform: scale(0.95) translateY(30px);
-  transition: all 2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: all 2s ease;
+  transform: translateY(20px);
 }
 
 #final-photo.show {
   display: block;
   opacity: 1;
-  transform: scale(1) translateY(0);
+  transform: translateY(0);
 }
 
 #final-photo img {
   width: 100%;
   height: auto;
   border-radius: 24px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.12);
-  display: block;
-}
-
-/* 移动端细调 */
-@media (max-width: 600px) {
-  #typing-container {
-    font-size: 1.05rem;
-    padding: 0 10px;
-  }
-  .lock-box { width: 80%; }
+  box-shadow: 0 20px 45px rgba(0,0,0,0.1);
 }
