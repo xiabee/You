@@ -7,32 +7,27 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-<canvas id="snow-canvas"></canvas>
-
-<div id="lock-screen">
-  <div class="lock-box">
-    <div class="heart-icon">✉️</div>
-    <p>请输入我们的纪念日</p>
-    <input type="password" id="password" placeholder="YYYYMMDD" maxlength="8" autofocus />
-    <button onclick="unlock()">开启心跳</button>
-  </div>
-</div>
-
-<audio id="bgm" src="music.mp3" loop></audio>
-
-<main id="main-wrapper">
-  <div id="letter-container">
-    <div class="letter-paper">
-      <div id="typing-container"></div>
-      <div id="final-photo">
-        <img src="assets/photo.jpg" alt="我们" />
-        <p class="photo-date">2025 · 岁末</p>
-      </div>
+  <canvas id="snow-canvas"></canvas>
+  <div id="lock-screen">
+    <div class="lock-box">
+      <div class="heart-icon">✉️</div>
+      <p>请输入我们的纪念日</p>
+      <input type="password" id="password" placeholder="YYYYMMDD" maxlength="8" autofocus />
+      <button onclick="unlock()">开启心跳</button>
     </div>
   </div>
-</main>
-
-<script src="script.js"></script>
+  <audio id="bgm" src="music.mp3" loop></audio>
+  <main id="main-wrapper">
+    <div id="letter-container">
+      <div class="letter-paper">
+        <div id="typing-container"></div>
+        <div id="final-photo">
+          <img src="assets/photo.jpg" alt="我们" />
+          <p class="photo-date">2025 · 岁末</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="script.js"></script>
 </body>
 </html>
