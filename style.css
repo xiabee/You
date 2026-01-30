@@ -1,61 +1,203 @@
+/* --- 基础设置 --- */
 :root {
-  --paper-color: #fdfdfb;
-  --text-color: #444;
-  --accent: #d4a5a5;
+  --paper-color: #fdfdfb;  /* 暖白色信纸 */
+  --text-color: #444444;  /* 柔和深灰 */
+  --accent-color: #d4a5a5; /* 告白粉 */
+  --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+html {
+  scroll-behavior: smooth; /* 全局开启平滑滚动，用于字幕跟随效果 */
 }
 
 body, html {
-  margin: 0; padding: 0; height: 100%; width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  /* 柔和的渐变背景，像清晨的雾气 */
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  font-family: "Noto Serif SC", serif;
+  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
   color: var(--text-color);
   overflow-x: hidden;
 }
 
-#snow-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
-
-#lock-screen {
-  position: fixed; inset: 0; background: #fff;
-  display: flex; justify-content: center; align-items: center;
-  z-index: 1000; transition: opacity 1s;
+/* --- 飘雪画布 --- */
+#snow-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none; /* 穿透点击，不影响页面交互 */
+  z-index: 1;
 }
 
-.lock-box { text-align: center; }
-.heart-icon { font-size: 3rem; margin-bottom: 1rem; animation: heartbeat 1.5s infinite; }
-@keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+/* --- 🔒 锁屏界面 --- */
+#lock-screen {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 1.2s ease-out;
+}
 
-.lock-box input { padding: 12px; border: 1px solid #eee; border-radius: 8px; width: 220px; text-align: center; }
-.lock-box button { display: block; margin: 20px auto; padding: 10px 40px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; }
+.lock-box {
+  text-align: center;
+}
 
+.heart-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  animation: heartbeat 1.5s infinite ease-in-out;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.lock-box input {
+  padding: 12px;
+  border: 1px solid #eeeeee;
+  border-radius: 8px;
+  width: 240px;
+  text-align: center;
+  font-size: 16px;
+  outline: none;
+  background: #fafafa;
+  transition: border 0.3s;
+}
+
+.lock-box input:focus {
+  border-color: var(--accent-color);
+}
+
+.lock-box button {
+  display: block;
+  margin: 25px auto;
+  padding: 12px 50px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  transition: transform 0.2s;
+}
+
+.lock-box button:active {
+  transform: scale(0.95);
+}
+
+/* --- 💌 信封内容容器 --- */
 #main-wrapper {
-  position: relative; z-index: 2;
-  display: flex; justify-content: center;
-  padding: 60px 20px; min-height: 100vh;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: 80px 20px; /* 顶部留白多一点，更有呼吸感 */
+  min-height: 100vh;
 }
 
 #letter-container {
-  width: 100%; max-width: 600px;
-  opacity: 0; transform: translateY(50px);
-  transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  width: 100%;
+  max-width: 620px;
+  opacity: 0;
+  transform: translateY(60px);
+  transition: all 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-#letter-container.open { opacity: 1; transform: translateY(0); }
 
+/* 当添加 open 类名时，信件向上滑入显示 */
+#letter-container.open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- 📄 信纸质感设置 --- */
 .letter-paper {
   background: var(--paper-color);
-  background-image: radial-gradient(#e5e5e5 0.5px, transparent 0);
-  background-size: 30px 30px;
-  padding: 60px 45px;
+  /* 制作非常浅的横线纹理，像实体信纸 */
+  background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 100% 2.3rem; /* 对应文字行高 */
+  padding: 60px 50px 150px 50px; /* 底部大留白，确保字幕滚动效果 */
   border-radius: 2px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-  min-height: 60vh;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0,0,0,0.02);
+  min-height: 70vh;
 }
 
-#typing-container { font-size: 1.1rem; line-height: 2.3; letter-spacing: 0.05em; }
-.typing-line { margin-bottom: 15px; min-height: 1.2em; }
-.typing-line.active::after { content: " 🖋️"; color: var(--accent); animation: blink 1s infinite; }
-@keyframes blink { 50% { opacity: 0; } }
+/* --- ✍️ 字幕式打字效果排版 --- */
+#typing-container {
+  font-size: 1.15rem;
+  line-height: 2.3; /* 对应背景线条高度 */
+  letter-spacing: 0.08em;
+  text-align: justify;
+}
 
-#final-photo { margin-top: 40px; display: none; text-align: center; opacity: 0; transition: opacity 2s; }
-#final-photo.show { display: block; opacity: 1; }
-#final-photo img { max-width: 100%; border: 10px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.photo-date { font-size: 0.9rem; color: #999; margin-top: 10px; }
+.typing-line {
+  margin-bottom: 10px;
+  min-height: 1.2em;
+}
+
+/* 🖋️ 打字机光标 */
+.typing-line.active::after {
+  content: " 🖋️";
+  color: var(--accent-color);
+  font-size: 1.1rem;
+  animation: blink 0.8s infinite;
+  margin-left: 4px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* --- 📸 结尾照片 --- */
+#final-photo {
+  margin-top: 60px;
+  display: none;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 2.5s ease-in;
+}
+
+#final-photo.show {
+  display: block;
+  opacity: 1;
+}
+
+#final-photo img {
+  max-width: 100%;
+  border: 12px solid #ffffff; /* 经典相框效果 */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transform: rotate(-1deg); /* 随意的摆放感 */
+}
+
+.photo-date {
+  font-size: 0.9rem;
+  color: #999999;
+  margin-top: 15px;
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+/* --- 📱 移动端小屏幕适配 --- */
+@media (max-width: 600px) {
+  #main-wrapper {
+    padding: 40px 15px;
+  }
+  .letter-paper {
+    padding: 45px 25px 120px 25px; /* 手机端减小左右内边距 */
+  }
+  #typing-container {
+    font-size: 1.05rem;
+    line-height: 2.1;
+  }
+  .letter-paper {
+    background-size: 100% 2.1rem;
+  }
+}

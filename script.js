@@ -10,8 +10,9 @@ let snowflakes = [];
 let lineIndex = 0;
 let charIndex = 0;
 let currentLineElem;
-let speed = 80;
+let speed = 120; // 🐌 速度调慢，更有读信感
 
+// --- 1. 农历生日判断 (腊月十四) ---
 function isLunarBirthday() {
   const today = new Date();
   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -44,7 +45,6 @@ if (isTodayBirthday) {
   lines.push("今天是农历腊月十四。");
   lines.push("你是这世间，我最想私藏的惊喜。");
   lines.push("祝你生日快乐，格妮。");
-  lines.push("愿你每一天都奔赴在你的热爱里。");
 } else {
   lines.push("( ⚠️ 提示：信件末尾还有一段话，");
   lines.push("会在农历腊月十四那天自动开启。");
@@ -52,6 +52,50 @@ if (isTodayBirthday) {
 }
 lines.push("", "—— 肖 sir");
 
+// --- 2. 打字与自动跟随逻辑 ---
+function typeNext() {
+  if (lineIndex >= lines.length) {
+    if (currentLineElem) currentLineElem.classList.remove("active");
+    finalPhoto.classList.add("show");
+    // 结束后滚动到照片位置
+    setTimeout(() => {
+        finalPhoto.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 500);
+    return;
+  }
+
+  if (charIndex === 0) {
+    if (currentLineElem) currentLineElem.classList.remove("active");
+    currentLineElem = document.createElement("p");
+    currentLineElem.className = "typing-line active";
+    container.appendChild(currentLineElem);
+  }
+
+  const text = lines[lineIndex];
+
+  if (text === "") {
+    lineIndex++; charIndex = 0;
+    setTimeout(typeNext, 800); 
+    return;
+  }
+
+  if (charIndex < text.length) {
+    currentLineElem.textContent += text.charAt(charIndex++);
+    
+    // ✨ 核心优化：自动翻动跟随
+    // 每次打字时，让窗口平滑滚动到当前行
+    currentLineElem.scrollIntoView({ behavior: "smooth", block: "end" });
+
+    let pause = speed;
+    if ("，。！".includes(text.charAt(charIndex-1))) pause = 600; 
+    setTimeout(typeNext, pause);
+  } else {
+    lineIndex++; charIndex = 0;
+    setTimeout(typeNext, 1200); // 行与行之间停顿长一点
+  }
+}
+
+// --- 3. 基础引擎 (雪花/解锁等) ---
 class Snowflake {
   constructor() { this.reset(); }
   reset() {
@@ -74,30 +118,12 @@ function animateSnow() {
 function unlock() {
   if (document.getElementById("password").value === "20251231") {
     lockScreen.style.opacity = "0";
-    setTimeout(() => { lockScreen.style.display = "none"; letterContainer.classList.add("open"); start(); }, 1000);
+    setTimeout(() => { 
+        lockScreen.style.display = "none"; 
+        letterContainer.classList.add("open"); 
+        start(); 
+    }, 1000);
   } else { alert("密码不对哦"); }
-}
-
-function typeNext() {
-  if (lineIndex >= lines.length) {
-    if (currentLineElem) currentLineElem.classList.remove("active");
-    finalPhoto.classList.add("show");
-    return;
-  }
-  if (charIndex === 0) {
-    if (currentLineElem) currentLineElem.classList.remove("active");
-    currentLineElem = document.createElement("p");
-    currentLineElem.className = "typing-line active";
-    container.appendChild(currentLineElem);
-  }
-  const text = lines[lineIndex];
-  if (text === "") { lineIndex++; charIndex = 0; setTimeout(typeNext, 600); return; }
-  if (charIndex < text.length) {
-    currentLineElem.textContent += text.charAt(charIndex++);
-    let pause = speed;
-    if ("，。！".includes(text.charAt(charIndex-1))) pause = 500;
-    setTimeout(typeNext, pause);
-  } else { lineIndex++; charIndex = 0; setTimeout(typeNext, 900); }
 }
 
 function start() {
@@ -105,7 +131,13 @@ function start() {
   for (let i = 0; i < 50; i++) snowflakes.push(new Snowflake());
   animateSnow();
   bgm.play().catch(() => {});
-  setTimeout(typeNext, 1200);
+  setTimeout(typeNext, 1500);
 }
 
-document.body.addEventListener("click", () => { speed = 20; });
+// 监听回车解锁
+document.getElementById("password").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") unlock();
+});
+
+// 点击可以稍微提速，但不会变飞快
+document.body.addEventListener("click", () => { speed = 50; });
